@@ -25,14 +25,16 @@ services:
     image: res/apache_php
     labels:
       - "traefik.http.routers.apache_static.rule=Host(`demo.res.ch`)"
+      #Add sticky session cookie
+      - "traefik.http.services.static_service.loadbalancer.sticky.cookie.name=apache_static"
       
   apache_dynamic:  
     image: res/express_flats
     labels:   
       - "traefik.http.routers.apache_dynamic.rule=Host(`demo.res.ch`) && Path(`/api/flats/`)"    
-      - "traefik.http.services.dynamic_port_service.loadbalancer.server.port=3000"    
+      - "traefik.http.services.dynamic_service.loadbalancer.server.port=3000"    
       - "traefik.http.middlewares.dynamic_replace_path.replacepath.path=/"     
       - "traefik.http.routers.apache_dynamic.middlewares=dynamic_replace_path"
-      
-      #- "traefik.http.services.dynamic_port_service.loadbalancer.sticky.cookie.name=route-apache_dynamic"
+      #Add sticky session cookie
+      - "traefik.http.services.dynamic_service.loadbalancer.sticky.cookie.name=apache_dynamic"
       
