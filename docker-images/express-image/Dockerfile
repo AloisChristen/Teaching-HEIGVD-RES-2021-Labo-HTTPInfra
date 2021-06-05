@@ -1,7 +1,6 @@
 FROM node:14.17
 
-RUN apt-get update && \
-	apt-get install -y vim
+EXPOSE 3000
 
 COPY src /opt/app
 
