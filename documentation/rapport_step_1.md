@@ -20,13 +20,13 @@ Nous avons choisi le thème **GrayScale**, disponible sur https://startbootstrap
 
 Pour créer notre image docker, lancer la commande suivante :
 
- `docker build -t "apache-static" .`
+ `docker build -t "res/apache_php" .`
 
 ### Run du container
 
 Pour lancer le container effectuer la commande suivante :
 
-`docker run -d -p 9090:80 apache-static`
+`docker run -d -p 9090:80 res/apache_php`
 
 ### Connexion au site grâce à un navigateur
 

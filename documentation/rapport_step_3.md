@@ -44,21 +44,21 @@ RUN a2ensite 000-* 001-*
 
 Pour créer notre image docker, lancer la commande suivante :
 
- `docker build -t res/apache_pr .`
+ `docker build -t res/apache_rp .`
 
 ### Run des containers
 
 Pour faire fonctionner le proxy, il faut lancer 3 containers : ceux des ressources statiques et dynamiques, et le container du reverse proxy
 
-`docker run -d apache-static`
+`docker run -d res/apache_php`
 
 `docker run -d res/express_flats`
 
-`docker run -d -p 8080:80 res/apache_pr`
+`docker run -d -p 8080:80 res/apache_rp`
 
 Il est important de lancer les containers dans cet ordre là, car les adresses IP dans le reverse proxy sont codées en dur.
 
-(apache-static doit avoir l'adresse 172.17.0.2 et express_flats l'adresse 172.17.0.3)
+(apache_php doit avoir l'adresse 172.17.0.2 et express_flats l'adresse 172.17.0.3)
 
 ### Configuration du fichier dns Hosts
 
