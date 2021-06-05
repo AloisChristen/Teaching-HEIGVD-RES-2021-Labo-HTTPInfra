@@ -1,21 +1,30 @@
 version: '3'
 
 services:
-    reverse-proxy:
-        # The official v2 Traefik docker image
-        image: traefik:v2.4
-        # Enables the web UI and tells Traefik to listen to docker
-        command: --api.insecure=true --providers.docker
-        ports:
-        # The HTTP port
-        - "80:80"
-        # The Web UI (enabled by --api.insecure=true)
-        - "8080:8080"
-        volumes:
-        # So that Traefik can listen to the Docker events
-        - /var/run/docker.sock:/var/run/docker.sock
-    whoami:
-        # A container that exposes an API to show its IP address
-        image: traefik/whoami
-        labels:
-        - "traefik.http.routers.whoami.rule=Host(`whoami.docker.localhost`)"
+  reverse_proxy:
+    # The official v2 Traefik docker image
+    image: traefik:v2.4
+    # Enables the web UI and tells Traefik to listen to docker
+    command: --api.insecure=true --providers.docker
+    ports:
+      # The HTTP port
+      - "8080:80"      
+      # The Web UI (enabled by --api.insecure=true)
+      - "8081:8080"
+    volumes:
+      # So that Traefik can listen to the Docker events
+      - /var/run/docker.sock:/var/run/docker.sock
+           
+  apache_static:
+    image: res/apache_php
+    labels:
+      - "traefik.http.routers.apache_static.rule=Host(`demo.res.ch`)"
+      
+  apache_dynamic:  
+    image: res/express_flats
+    labels:   
+      - "traefik.http.routers.apache_dynamic.rule=Host(`demo.res.ch`) && Path(`/api/flats/`)"    
+      - "traefik.http.services.dynamic_port_service.loadbalancer.server.port=3000"    
+      - "traefik.http.middlewares.dynamic_replace_path.replacepath.path=/"     
+      - "traefik.http.routers.apache_dynamic.middlewares=dynamic_replace_path"
+      
